@@ -8,15 +8,14 @@ let mediaFiles = [
 let currentIndex = 0;
 
 function displayMedia(url, duration, mime) {
+    console.log("Attempting to load:", url);
+    
     const mediaContainer = document.getElementById("mediaContainer");
     mediaContainer.innerHTML = ''; // Clear previous content
-    mediaContainer.style.display = 'block'; // Ensure media container is visible
+    mediaContainer.style.display = 'block';
 
-    // Hide error message if previously shown
     const errorMessage = document.getElementById('error-message');
-    if (errorMessage) {
-        errorMessage.style.display = 'none';
-    }
+    if (errorMessage) errorMessage.style.display = 'none';
 
     let mediaElement;
 
@@ -37,18 +36,16 @@ function displayMedia(url, duration, mime) {
         mediaElement.autoplay = true;
         mediaElement.muted = true;
         mediaElement.loop = false;
-
         mediaElement.onerror = () => errorHandler(`Failed to load: ${url}`);
 
-        // Move to next media when video finishes
-        mediaElement.onended = () => getNextMedia(); 
-
+        mediaElement.onended = () => getNextMedia();
         mediaContainer.appendChild(mediaElement);
     } 
     else {
         errorHandler(`Unsupported media type: ${mime}`);
     }
 }
+
 
 function errorHandler(message) {
     console.error("Error:", message);
