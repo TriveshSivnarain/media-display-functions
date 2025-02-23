@@ -1,15 +1,15 @@
 let mediaFiles = [
-    { url: "media/image1.jpg", duration: 3000, mime: "image/jpg" },
-    { url: "media/image2.jpg", duration: 3000, mime: "image/jpg" },
+    { url: "media/image1.jpg", duration: 3000, mime: "image/jpeg" },
+    { url: "media/image2.jpg", duration: 3000, mime: "image/jpeg" },
     { url: "media/video1.mp4", duration: 5000, mime: "video/mp4" },
-    { url: "media/missing.jpg", duration: 3000, mime: "image/jpg" } // Simulated missing file
+    { url: "media/missing.jpg", duration: 3000, mime: "image/jpeg" } // Simulated missing file
 ];
 
 let currentIndex = 0;
 
 function displayMedia(url, duration, mime) {
     console.log("Attempting to load:", url);
-    
+
     const mediaContainer = document.getElementById("mediaContainer");
     mediaContainer.innerHTML = ''; // Clear previous content
     mediaContainer.style.display = 'block';
@@ -23,7 +23,7 @@ function displayMedia(url, duration, mime) {
         mediaElement = document.createElement("img");
         mediaElement.src = url;
         mediaElement.classList.add("media-content");
-        mediaElement.onerror = () => errorHandler(`Failed to load: ${url}`);
+        mediaElement.onerror = () => handleMissingMedia(url);
         mediaContainer.appendChild(mediaElement);
 
         setTimeout(getNextMedia, duration);
@@ -36,7 +36,7 @@ function displayMedia(url, duration, mime) {
         mediaElement.autoplay = true;
         mediaElement.muted = true;
         mediaElement.loop = false;
-        mediaElement.onerror = () => errorHandler(`Failed to load: ${url}`);
+        mediaElement.onerror = () => handleMissingMedia(url);
 
         mediaElement.onended = () => getNextMedia();
         mediaContainer.appendChild(mediaElement);
@@ -46,6 +46,10 @@ function displayMedia(url, duration, mime) {
     }
 }
 
+function handleMissingMedia(url) {
+    console.error(`Missing media detected: ${url}`);
+    errorHandler(`Failed to load: ${url}`);
+}
 
 function errorHandler(message) {
     console.error("Error:", message);
@@ -67,14 +71,13 @@ function errorHandler(message) {
 }
 
 function getNextMedia() {
-    let startIndex = currentIndex; // Store initial index to prevent infinite loops
     let attempts = 0;
 
     do {
         currentIndex = (currentIndex + 1) % mediaFiles.length;
         let media = mediaFiles[currentIndex];
 
-        if (media.url !== "./media/missing.jpg") {
+        if (media.url !== "media/missing.jpg") {
             displayMedia(media.url, media.duration, media.mime);
             return;
         }
