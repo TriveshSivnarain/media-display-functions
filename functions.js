@@ -1,8 +1,8 @@
 let mediaFiles = [
-    { url: "media/image1.jpg", duration: 3000, mime: "image/jpeg" },
-    { url: "media/image2.jpg", duration: 3000, mime: "image/jpeg" },
-    { url: "media/video1.mp4", duration: 5000, mime: "video/mp4" },
-    { url: "media/missing.jpg", duration: 3000, mime: "image/jpeg" } // This will trigger an error
+    { url: "./media/image1.jpg", duration: 3000, mime: "image/jpeg" },
+    { url: "./media/image2.jpg", duration: 3000, mime: "image/jpeg" },
+    { url: "./media/video1.mp4", duration: 5000, mime: "video/mp4" },
+    { url: "./media/missing.jpg", duration: 3000, mime: "image/jpeg" } // This will trigger an error
 ];
 
 let currentIndex = 0;
