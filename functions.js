@@ -2,7 +2,7 @@ let mediaFiles = [
     { url: "./media/image1.jpg", duration: 3000, mime: "image/jpeg" },
     { url: "./media/image2.jpg", duration: 3000, mime: "image/jpeg" },
     { url: "./media/video1.mp4", duration: 5000, mime: "video/mp4" },
-    { url: "./media/missing.jpg", duration: 3000, mime: "image/jpeg" } // This will trigger an error
+    { url: "./media/missing.jpg", duration: 3000, mime: "image/jpeg" } // Simulated missing file
 ];
 
 let currentIndex = 0;
@@ -68,20 +68,26 @@ function errorHandler(message) {
 
 function getNextMedia() {
     let startIndex = currentIndex; // Store initial index to prevent infinite loops
+    let attempts = 0;
 
     do {
         currentIndex = (currentIndex + 1) % mediaFiles.length;
         let media = mediaFiles[currentIndex];
 
-        // If media URL is valid, display it
-        if (media.url !== "media/missing.jpg") {
+        if (media.url !== "./media/missing.jpg") {
             displayMedia(media.url, media.duration, media.mime);
             return;
         }
-    } while (currentIndex !== startIndex); // Ensure it doesn't loop indefinitely
 
-    // If no valid media found, restart from beginning
-    console.error("No valid media found!");
+        attempts++;
+
+        // Prevent infinite loop if all files are missing
+        if (attempts >= mediaFiles.length) {
+            console.error("No valid media found, restarting from the beginning...");
+            currentIndex = 0;
+        }
+
+    } while (attempts < mediaFiles.length);
 }
 
 // Start the loop
